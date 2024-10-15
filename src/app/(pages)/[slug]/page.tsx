@@ -8,6 +8,7 @@ import { staticHome } from '../../../payload/seed/home-static'
 import { fetchDoc } from '../../_api/fetchDoc'
 import { fetchDocs } from '../../_api/fetchDocs'
 import { Blocks } from '../../_components/Blocks'
+import Categories from '../../_components/Categories'
 import { Gutter } from '../../_components/Gutter'
 import { Hero } from '../../_components/Hero'
 import { generateMeta } from '../../_utilities/generateMeta'
@@ -20,6 +21,7 @@ export default async function Page({ params: { slug = 'home' } }) {
   const { isEnabled: isDraftMode } = draftMode()
 
   let page: Page | null = null
+  let categories: Category[] | null = null
 
   try {
     page = await fetchDoc<Page>({
@@ -27,6 +29,7 @@ export default async function Page({ params: { slug = 'home' } }) {
       slug,
       draft: isDraftMode,
     })
+    categories = await fetchDocs<Category>('categories')
   } catch (error) {
     console.log(error)
   }
@@ -44,9 +47,12 @@ export default async function Page({ params: { slug = 'home' } }) {
   return (
     <React.Fragment>
       {slug === 'home' ? (
-        <Gutter>
+        <section>
           <Hero {...hero} />
-        </Gutter>
+          <Gutter className={classes.home}>
+            <Categories categories={categories} />
+          </Gutter>
+        </section>
       ) : (
         <>
           <Hero {...hero} />
@@ -73,7 +79,6 @@ export async function generateMetadata({ params: { slug = 'home' } }): Promise<M
   const { isEnabled: isDraftMode } = draftMode()
 
   let page: Page | null = null
-  let categories: Category[] | null = null
 
   try {
     page = await fetchDoc<Page>({
@@ -81,13 +86,8 @@ export async function generateMetadata({ params: { slug = 'home' } }): Promise<M
       slug,
       draft: isDraftMode,
     })
-
-    categories = await fetchDocs<Category>('categories')
   } catch (error) {
-    // don't throw an error if the fetch fails
-    // this is so that we can render a static home page for the demo
-    // when deploying this template on Payload Cloud, this page needs to build before the APIs are live
-    // in production you may want to redirect to a 404  page or at least log the error somewhere
+    console.log(error)
   }
 
   if (!page && slug === 'home') {

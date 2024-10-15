@@ -1,3 +1,7 @@
+// until 1 hr 47 min
+// https://www.youtube.com/watch?v=3JUsg-WsU9o
+
+
 import React from 'react'
 import { Metadata } from 'next'
 import { Jost } from 'next/font/google'
