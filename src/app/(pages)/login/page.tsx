@@ -1,3 +1,6 @@
+// Link: https://www.youtube.com/watch?v=3JUsg-WsU9o
+// until: 1 hr 10 min
+
 import React from 'react'
 import { Metadata } from 'next'
 import Image from 'next/image'
